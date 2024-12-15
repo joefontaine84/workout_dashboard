@@ -1,0 +1,47 @@
+---
+title: "Joe's Workout Dashboard:"
+format: dashboard
+editor: visual
+theme: cyborg
+---
+
+# Data {orientation="rows"}
+
+## Column 1
+
+```{r}
+#| echo: false
+#| warning: false
+#| title: "Raw Data:"
+
+
+source(file="db_connection.R")
+
+df <- get_data()
+
+knitr::kable(df, col.names = c("Date", "Pushups",
+                               "Situps", "Squats",
+                               "Run (mi)", "Walk (mi)",
+                               "Bike (mi)", "Other",
+                               "Comments"))
+
+```
+
+## Column 2
+
+```{r}
+#| echo: false
+#| warning: false
+#| title: "Add, Edit, or Delete Data:"
+
+x <- "placeholder"
+
+x
+
+```
+
+
+# Stats
+
+
+
