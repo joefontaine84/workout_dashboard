@@ -2,7 +2,8 @@
 title: "Joe's Workout Dashboard:"
 format: dashboard
 editor: visual
-theme: cyborg
+theme: cosmo
+server: shiny
 ---
 
 # Data {orientation="rows"}
@@ -14,16 +15,49 @@ theme: cyborg
 #| warning: false
 #| title: "Raw Data:"
 
+library(DT)
+library(shiny)
+library(shinyBS)
+library(shinyjs)
+library(dplyr)
+library(bslib)
+library(fontawesome)
 
 source(file="db_connection.R")
 
+update_button <- tags$button(type="button", id="update_button", style="color:blue", "Update")
+
+delete_button <- tags$button(type="button", id="delete_button", icon("trash", lib="glyphicon"))
+
+delete_button <- "<button type='button' id='delete_button'><i class='glyphicon glyphicon-trash' style='font-size: 100px;'></i></button>"
+
+#delete_button <- as.character(icon("trash", lib="glyphicon"))
+
+tags$div(HTML("<i class='glyphicon glyphicon-trash' style='font-size: 100px;'></i>"))
+
+x <- as.character(tags$button(type="button", id="edit", style="border: none; background: none;", fa("pen-nib", fill="green", stroke=NULL)))
+y <- as.character(tags$button(type="button", id="delete", style="border: none; background: none;", fa("trash", fill="red", stroke=NULL)))
+
+buttons <- paste0(x, y)
+
+buttons
+
 df <- get_data()
 
-knitr::kable(df, col.names = c("Date", "Pushups",
-                               "Situps", "Squats",
-                               "Run (mi)", "Walk (mi)",
-                               "Bike (mi)", "Other",
-                               "Comments"))
+# x <- rep(as.character(update_button), times = nrow(df))
+# y <- rep(as.character(delete_button), times = nrow(df)))
+
+
+df <- df %>% mutate(
+  button = buttons
+)
+
+DT::datatable(df, colnames = c("Date", "Pushups",
+                                "Situps", "Squats",
+                                "Run (mi)", "Walk (mi)",
+                                "Bike (mi)", "Other",
+                                "Comments", " "),
+              escape = FALSE)
 
 ```
 
@@ -33,6 +67,7 @@ knitr::kable(df, col.names = c("Date", "Pushups",
 #| echo: false
 #| warning: false
 #| title: "Add, Edit, or Delete Data:"
+#| context: server
 
 x <- "placeholder"
 
